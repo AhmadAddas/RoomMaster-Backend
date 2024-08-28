@@ -4,13 +4,12 @@
 
 ## Overview
 
-RoomMaster is a conference room booking system built with a Dockerized Spring Boot application and PostgreSQL database. It features a robust API for managing room bookings, maintenance schedules, and user authentication.
+RoomMaster is a conference room booking system built with a Dockerized Spring Boot application, JWT, and PostgreSQL database. It features a robust API for managing room bookings, maintenance schedules, and user authentication.
 
 # Features
 
 - **Autogenerate Sample Data**: Automatically generates conference rooms Amaze, Beauty, Inspire, and Strive and assign maintenance timings (9:00-9:15 AM, 1:00-1:15 PM, 5:00-5:15 PM) for them for an instant run.
 - **Same-Day Bookings:** Allows bookings only for the current server day.
-- **Pessimistic Locking:** Prevents race conditions when multiple users try to book the same room.
 - **Overlapping Bookings Handling:** Rejects bookings that overlap with existing ones.
 - **Maintenance Time Checks:** Prevents bookings during room maintenance periods.
 - **Validation Checks:** Ensures valid time inputs and adheres to room capacity.
