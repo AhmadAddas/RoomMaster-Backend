@@ -1,0 +1,45 @@
+name: RoomMaster Dockerized Spring Boot Backend
+
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Docker BuildX
+      uses: docker/setup-buildx-action@v3
+
+    - name: Cleanup Docker Containers for a fresh start
+      run: docker compose down --rmi all --volumes --remove-orphans
+
+    - name: Cleanup Docker Data for a fresh start
+      run: docker system prune -a --volumes -f
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+
+    - name: Start Docker Compose
+      run: docker compose up -d
+
+    - name: Run tests
+      run: mvn test -Dtest=ae.roommaster.app.**
+
+    - name: Tear down Docker Compose
+      run: docker compose down

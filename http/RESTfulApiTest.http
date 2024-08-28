@@ -1,0 +1,118 @@
+### Register User Joe with role ADMIN (PUBLIC)
+POST http://localhost:8081/api/v1/auth/register
+Content-Type: application/json
+
+{
+  "firstname": "Joe",
+  "lastname": "Doe",
+  "email": "joe@roommaster.ae",
+  "password": "password",
+  "role": "ADMIN"
+}
+
+> {% client.global.set("auth-token", response.body.access_token); %}
+
+### Authenticate user Joe (Token renew if login again) (PUBLIC)
+POST http://localhost:8081/api/v1/auth/authenticate
+Content-Type: application/json
+
+{
+  "email": "joe@roommaster.ae",
+  "password": "password"
+}
+
+### Query all users (ADMIN OR MANAGER)
+GET http://localhost:8081/api/v1/users
+Authorization: Bearer {{auth-token}}
+Content-Type: application/json
+
+### Query user with ID 1 (ADMIN OR MANAGER)
+GET http://localhost:8081/api/v1/users/1
+Authorization: Bearer {{auth-token}}
+Content-Type: application/json
+
+### Query all rooms (PUBLIC)
+GET http://localhost:8081/api/v1/rooms/
+Content-Type: application/json
+
+### Query specific room with ID 1 (PUBLIC)
+GET http://localhost:8081/api/v1/rooms/1
+Content-Type: application/json
+
+### Create a new room called "Conference Room A" with capacity of 20 (You can add maintenance time too) (ADMIN OR MANAGER)
+POST http://localhost:8081/api/v1/rooms
+Authorization: Bearer {{auth-token}}
+Content-Type: application/json
+
+{
+  "name": "Conference Room A",
+  "capacity": 20
+}
+
+### Delete room with ID 2 (ADMIN OR MANAGER)
+DELETE http://localhost:8081/api/v1/rooms/2
+Authorization: Bearer {{auth-token}}
+Content-Type: application/json
+
+### Create a booking for room ID 5 for userID 3 with start time of 10 AM on 28 Aug 2024 and ends on 12 PM on 28 Aug 2024 (ADMIN OR MANAGER OR USER)
+POST http://localhost:8081/api/v1/bookings
+Authorization: Bearer {{auth-token}}
+Content-Type: application/json
+
+{
+  "roomId": 5,
+  "userId": 3,
+  "startTime": "2024-08-28T10:00:00",
+  "endTime": "2024-08-28T12:00:00",
+  "numberOfPeople": 5
+}
+
+### Query booking for ID 1 (ADMIN OR MANAGER)
+GET http://localhost:8081/api/v1/bookings/1
+Authorization: Bearer {{auth-token}}
+Content-Type: application/json
+
+### Query all bookings (ADMIN OR MANAGER)
+GET http://localhost:8081/api/v1/bookings
+Authorization: Bearer {{auth-token}}
+Content-Type: application/json
+
+### Query all bookings from a specific user with ID 1 (ADMIN OR MANAGER)
+GET http://localhost:8081/api/v1/bookings/user/1
+Authorization: Bearer {{auth-token}}
+Content-Type: application/json
+
+### Query all available rooms for booking with params startTime 28 Aug 2024 4 PM and endTime 28 Aug 2024 4:15 PM (PUBLIC)
+GET http://localhost:8081/api/v1/bookings/available-rooms?startTime=2024-08-28T16:00:00&endTime=2024-08-28T16:15:00
+Content-Type: application/json
+
+### Query maintenance time for room ID 1 (PUBLIC)
+GET http://localhost:8081/api/v1/maintenance-times/room/1
+Authorization: Bearer {{auth-token}}
+Content-Type: application/json
+
+### Create maintenance time for room ID 1 with param startTime 6 PM and endTime 6:15 PM (ADMIN OR MANAGER)
+POST http://localhost:8081/api/v1/maintenance-times/add?room=1&startTime=18:00&endTime=18:15
+Authorization: Bearer {{auth-token}}
+Content-Type: application/json
+
+### Delete maintenance time ID (ADMIN OR MANAGER)
+DELETE http://localhost:8081/api/v1/maintenance-times/remove/1
+Authorization: Bearer {{auth-token}}
+Content-Type: application/json
+
+### Query the Demo hidden endpoint (ADMIN OR MANAGER OR USER)
+GET http://localhost:8081/api/v1/demo-controller
+Authorization: Bearer {{auth-token}}
+Content-Type: application/json
+
+### Change the password (ADMIN OR MANAGER OR USER)
+PATCH http://localhost:8081/api/v1/users
+Authorization: Bearer {{auth-token}}
+Content-Type: application/json
+
+{
+  "currentPassword": "password",
+  "newPassword": "newPassword",
+  "confirmationPassword": "newPassword"
+}
